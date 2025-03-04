@@ -31,10 +31,20 @@ namespace GestorPeliculas.MVVM.ViewModels
                     {
                         using (var data = await response.Content.ReadAsStreamAsync())
                         {
-                            var jsonFilms = JsonSerializer.DeserializeAsync<ObservableCollection<Film>>(
+                            var jsonFilms = await JsonSerializer.DeserializeAsync<List<Film>>(
                                 data, 
                                 _jsonOptions
                             );
+
+                            if (jsonFilms != null)
+                            {
+                                Films.Clear();
+                                foreach (var film in jsonFilms)
+                                {
+                                    Films.Add(film);
+                                }
+                                Console.WriteLine("peliculas cargadas.");
+                            }
                         }
                     }
                     else
@@ -45,13 +55,21 @@ namespace GestorPeliculas.MVVM.ViewModels
             }
         }             
                 
-        public ICommand GetFilmById => new Command(async () =>
+        public ICommand GetFilmById => new Command(async (id) =>
         {
             Film? film = null;
             try
             {
-                var url = $"{_urlBase}/films/:Id";
+                var url = $"{_urlBase}/films/{id}";
                 var response = await _httpClient.GetFromJsonAsync<Film>(url, _jsonOptions);
+                if(film != null)
+                {
+                    Films.Add(film);
+                }
+                else
+                {
+                    Console.WriteLine($"No film found with ID {id}");
+                }
             }
             catch (Exception ex)
             {
@@ -107,7 +125,7 @@ namespace GestorPeliculas.MVVM.ViewModels
 
         public ICommand DeleteFilm => new Command(async () =>
         {
-            var url = $"{_urlBase}/films/1";
+            var url = $"{_urlBase}/films/2";
             var response = await _httpClient.DeleteAsync(url);
         });
 
