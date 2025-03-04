@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestorPeliculas.MVVM.Views.MainView"
+             Title="MainView">
+
+    <Grid ColumnDefinitions="*, *">
+
+        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
+            <Button Text="Get all users" Command="{Binding GetAllFilmsCommand}"/>
+            <Button Text="Get Film by Id" Command="{Binding GetFilmById}" CommandParameter="1"/>
+            <Button Text="Add Film" Command="{Binding AddFilm}"/>
+            <Button Text="Update Film" Command="{Binding UpdateFilm}"/>
+            <Button Text="Delete Film" Command="{Binding DeleteFilm}"/>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Column="1" Padding="20">
+            <Label Text="Results:" FontSize="Large" FontAttributes="Bold"/>
+            <ScrollView>
+                <StackLayout>
+                    <Label Text="{Binding ResultMessage}" FontSize="Medium"/>
+                    <CollectionView ItemsSource="{Binding Film}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,5" Padding="10">
+                                    <StackLayout>
+                                        <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Director}"/>
+                                        <Label Text="{Binding Genero}"/>
+                                        <Label Text="{Binding Year, StringFormat='Year: {0}'}"/>
+                                    </StackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </ScrollView>
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>
