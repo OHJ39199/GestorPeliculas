@@ -16,8 +16,9 @@ namespace GestorPeliculas.MVVM.ViewModels
         private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         private string _urlBase = "https://678685c5f80b78923aa73076.mockapi.io/api/v1";
+       
         #endregion
-         
+
         #region COMMAND
         public ICommand GetAllFilmsCommand
         {
@@ -96,6 +97,19 @@ namespace GestorPeliculas.MVVM.ViewModels
                 Encoding.UTF8,
                 "application/json"
             );
+            var response = await _httpClient.PostAsync(url, content);
+            if (response.IsSuccessStatusCode)
+            {
+                if (film != null)
+                {
+                    Films.Add(film);
+                    Console.WriteLine("Film added successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Fail to add the new film.");
+                }
+            }
         });
 
         public ICommand UpdateFilm => new Command(async () =>
@@ -104,9 +118,9 @@ namespace GestorPeliculas.MVVM.ViewModels
             var film = Films.FirstOrDefault();
             if (film != null)
             {
-                var url = $"{_urlBase}/films/{film.Id}";
-                film.Nombre = " ";
-                film.Director = " ";
+                var url = $"{_urlBase}/films/:id";
+                film.Nombre = "actualizacion";
+                film.Director = "actualizacion";
                 film.Year = 2010;
 
 
@@ -125,11 +139,12 @@ namespace GestorPeliculas.MVVM.ViewModels
 
         public ICommand DeleteFilm => new Command(async () =>
         {
-            var url = $"{_urlBase}/films/2";
+            var url = $"{_urlBase}/films/1";
             var response = await _httpClient.DeleteAsync(url);
+
         });
 
-        public string HttpResponseMessage { get; private set; }
+        public string? HttpResponseMessage { get; private set; }
         #endregion
     }
 }
