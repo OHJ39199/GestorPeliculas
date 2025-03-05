@@ -16,7 +16,7 @@ namespace GestorPeliculas.MVVM.ViewModels
         private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         private string _urlBase = "https://678685c5f80b78923aa73076.mockapi.io/api/v1";
-       
+
         #endregion
 
         #region COMMAND
@@ -33,7 +33,7 @@ namespace GestorPeliculas.MVVM.ViewModels
                         using (var data = await response.Content.ReadAsStreamAsync())
                         {
                             var jsonFilms = await JsonSerializer.DeserializeAsync<List<Film>>(
-                                data, 
+                                data,
                                 _jsonOptions
                             );
 
@@ -54,8 +54,9 @@ namespace GestorPeliculas.MVVM.ViewModels
                     }
                 });
             }
-        }             
-                
+        }
+
+
         public ICommand GetFilmById => new Command(async (id) =>
         {
             Film? film = null;
@@ -65,7 +66,9 @@ namespace GestorPeliculas.MVVM.ViewModels
                 var response = await _httpClient.GetFromJsonAsync<Film>(url, _jsonOptions);
                 if(film != null)
                 {
+                    Films.Clear();
                     Films.Add(film);
+                    Console.WriteLine("pelicula cargada.");
                 }
                 else
                 {
