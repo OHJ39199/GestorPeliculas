@@ -7,21 +7,20 @@
     <Grid ColumnDefinitions="*, *">
 
         <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="20">
-            <Button Text="Get all users" Command="{Binding GetAllFilmsCommand}"/>
+            <Button Text="Get all films" Command="{Binding GetAllFilmsCommand}"/>
             <Button Text="Get Film by Id" Command="{Binding GetFilmById}" CommandParameter="1"/>
             <Button Text="Add Film" Command="{Binding AddFilm}"/>
             <Button Text="Update Film" Command="{Binding UpdateFilm}"/>
             <Button Text="Delete Film" Command="{Binding DeleteFilm}"/>
         </VerticalStackLayout>
-
-        <VerticalStackLayout Grid.Column="1" Padding="20">
-            <Label Text="Results:" FontSize="Large" FontAttributes="Bold"/>
-            <ScrollView>
+        <ScrollView Grid.Column="1" Padding="20">
+            <VerticalStackLayout >
+                <Label Text="Results:" FontSize="Large" FontAttributes="Bold"/>
                 <StackLayout>
                     <Label Text="{Binding ResultMessage}" FontSize="Medium"/>
-                    <CollectionView ItemsSource="{Binding Film}">
+                    <CollectionView ItemsSource="{Binding Films}">
                         <CollectionView.ItemTemplate>
-                            <DataTemplate>
+                            <DataTemplate >
                                 <Frame Margin="0,5" Padding="10">
                                     <StackLayout>
                                         <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
@@ -34,8 +33,8 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </StackLayout>
-            </ScrollView>
-        </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
     </Grid>
 
 </ContentPage>

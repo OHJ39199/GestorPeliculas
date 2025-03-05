@@ -16,8 +16,9 @@ namespace GestorPeliculas.MVVM.ViewModels
         private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions(JsonSerializerDefaults.Web);
 
         private string _urlBase = "https://678685c5f80b78923aa73076.mockapi.io/api/v1";
+
         #endregion
-         
+
         #region COMMAND
         public ICommand GetAllFilmsCommand
         {
@@ -31,10 +32,20 @@ namespace GestorPeliculas.MVVM.ViewModels
                     {
                         using (var data = await response.Content.ReadAsStreamAsync())
                         {
-                            var jsonFilms = JsonSerializer.DeserializeAsync<ObservableCollection<Film>>(
-                                data, 
+                            var jsonFilms = await JsonSerializer.DeserializeAsync<List<Film>>(
+                                data,
                                 _jsonOptions
                             );
+
+                            if (jsonFilms != null)
+                            {
+                                Films.Clear();
+                                foreach (var film in jsonFilms)
+                                {
+                                    Films.Add(film);
+                                }
+                                Console.WriteLine("peliculas cargadas.");
+                            }
                         }
                     }
                     else
@@ -43,15 +54,26 @@ namespace GestorPeliculas.MVVM.ViewModels
                     }
                 });
             }
-        }             
-                
-        public ICommand GetFilmById => new Command(async () =>
+        }
+
+
+        public ICommand GetFilmById => new Command(async (id) =>
         {
             Film? film = null;
             try
             {
-                var url = $"{_urlBase}/films/:Id";
+                var url = $"{_urlBase}/films/{id}";
                 var response = await _httpClient.GetFromJsonAsync<Film>(url, _jsonOptions);
+                if(film != null)
+                {
+                    Films.Clear();
+                    Films.Add(film);
+                    Console.WriteLine("pelicula cargada.");
+                }
+                else
+                {
+                    Console.WriteLine($"No film found with ID {id}");
+                }
             }
             catch (Exception ex)
             {
@@ -78,6 +100,19 @@ namespace GestorPeliculas.MVVM.ViewModels
                 Encoding.UTF8,
                 "application/json"
             );
+            var response = await _httpClient.PostAsync(url, content);
+            if (response.IsSuccessStatusCode)
+            {
+                if (film != null)
+                {
+                    Films.Add(film);
+                    Console.WriteLine("Film added successfully");
+                }
+                else
+                {
+                    Console.WriteLine("Fail to add the new film.");
+                }
+            }
         });
 
         public ICommand UpdateFilm => new Command(async () =>
@@ -86,9 +121,9 @@ namespace GestorPeliculas.MVVM.ViewModels
             var film = Films.FirstOrDefault();
             if (film != null)
             {
-                var url = $"{_urlBase}/films/{film.Id}";
-                film.Nombre = " ";
-                film.Director = " ";
+                var url = $"{_urlBase}/films/:id";
+                film.Nombre = "actualizacion";
+                film.Director = "actualizacion";
                 film.Year = 2010;
 
 
@@ -109,9 +144,10 @@ namespace GestorPeliculas.MVVM.ViewModels
         {
             var url = $"{_urlBase}/films/1";
             var response = await _httpClient.DeleteAsync(url);
+
         });
 
-        public string HttpResponseMessage { get; private set; }
+        public string? HttpResponseMessage { get; private set; }
         #endregion
     }
 }
