@@ -58,4 +58,4 @@ Este proyecto es una aplicación de gestión de películas desarrollada con .NET
 ## Objetivo del Proyecto
 -----------------------
 
-El propósito principal de esta aplicación es demostrar la implementación de operaciones CRUD en una aplicación .NET MAUI, ilustrando buenas prácticas de programación y diseño de interfaces de usuario para aplicaciones multiplataforma.
+El propósito principal de esta aplicación es demostrar la implementación de operaciones CRUD en una aplicación .NET MAUI, utilizando buenas prácticas de programación y diseño de interfaces de usuario para aplicaciones multiplataforma.
